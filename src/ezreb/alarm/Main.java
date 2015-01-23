@@ -51,7 +51,7 @@ public class Main {
 			}
 			Main.alarmsAll = alarms3;
 		} else if(args.length == 0) {
-			File alarms = new File(System.getProperty("user.home")+"\\AppData\\Alarms.json");
+			File alarms = alarmJSON;
 			if(alarms.exists() == false) {
 				try {
 					alarms.createNewFile();

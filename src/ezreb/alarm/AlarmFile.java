@@ -14,7 +14,7 @@ import org.json.JSONObject;
 public class AlarmFile {
 
 	public static Alarm[] getAlarms() {
-		File alarms = new File(System.getProperty("user.home")+"\\AppData\\Alarms.json");
+		File alarms = Main.alarmJSON;
 		if(alarms.exists() == false) {
 			try {
 				alarms.createNewFile();
@@ -65,12 +65,12 @@ public class AlarmFile {
 			todaysAlarms.put(alarm.toJSON());
 		}
 		try {
-			FileReader f = new FileReader(new File(System.getProperty("user.home")+"\\AppData\\Alarms.json"));
+			FileReader f = new FileReader(Main.alarmJSON);
 			BufferedReader b = new BufferedReader(f);
 			JSONObject alarmsJSON = new JSONObject(b.readLine());
 			f.close();
 			b.close();
-			FileWriter f2 = new FileWriter(new File(System.getProperty("user.home")+"\\AppData\\Alarms.json"));
+			FileWriter f2 = new FileWriter(Main.alarmJSON);
 			BufferedWriter b2 = new BufferedWriter(f2);
 			int dayint = Calendar.getInstance().get(Calendar.DAY_OF_WEEK);
 			String day = "";
@@ -91,8 +91,8 @@ public class AlarmFile {
 			}
 			alarmsJSON.remove(day);
 			alarmsJSON.put(day, todaysAlarms);
-			new File(System.getProperty("user.home")+"\\AppData\\Alarms.json").delete();
-			new File(System.getProperty("user.home")+"\\AppData\\Alarms.json").createNewFile();
+			Main.alarmJSON.delete();
+			Main.alarmJSON.createNewFile();
 			System.out.println(alarmsJSON.toString());
 			b2.write(alarmsJSON.toString());
 			b2.flush();
