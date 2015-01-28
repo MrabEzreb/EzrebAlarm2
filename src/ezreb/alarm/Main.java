@@ -11,72 +11,33 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FilenameFilter;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
-import java.net.JarURLConnection;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.net.URLDecoder;
-import java.nio.file.FileSystem;
-import java.nio.file.Path;
-import java.security.AccessController;
-import java.security.CodeSource;
-import java.security.PrivilegedAction;
 import java.util.Calendar;
-import java.util.jar.JarFile;
-
 import javax.swing.ImageIcon;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.json.XML;
 
 public class Main {
 
-	@SuppressWarnings("unchecked")
-	public static void main(String[] args) throws IOException, URISyntaxException {
+	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		//testing
-		Version.getVersion();
-		System.out.println(Main.class.getResource(""));
-		System.out.println(Main.class.getResource("/").getPath());
-		System.out.println(Main.class.getResource("/").getFile());
-		System.out.println(Main.class.getResource("/").toExternalForm());
-		System.out.println(Main.class.getResource("/").toString());
-		System.out.println(Main.class.getResource("").getFile());
-		System.out.println(Main.class.getProtectionDomain().getCodeSource().getLocation().getPath());
-		System.out.println(Main.class.getProtectionDomain().getCodeSource().getLocation().getFile());
-		System.out.println(Main.class.getProtectionDomain().getCodeSource().getLocation().getFile());
 		System.out.println(new File(Main.class.getClassLoader().getResource("").getFile()).getAbsolutePath());
-		System.out.println(ClassLoader.getSystemClassLoader().getResource(".").getPath());
-		System.out.println(ClassLoader.getSystemClassLoader().getResource(".").getFile());
-		String path = Main.class.getProtectionDomain().getCodeSource().getLocation().getPath();
-		String decodedPath = URLDecoder.decode(path, "UTF-8");
-		System.out.println(new File(decodedPath));
-		System.out.println(URLDecoder.decode(ClassLoader.getSystemClassLoader().getResource(".").getFile(), "UTF-8"));
-		URL url = Main.class.getResource(Main.class.getSimpleName()+".class");
-		System.out.println(url.toString());
-		System.out.println(url.toURI().normalize());
-		System.out.println(new File(url.toURI().toString()));
-		System.out.println(new File(url.toURI().toString()).getParentFile());
-		System.out.println(new File(url.toURI().toString()).getParentFile().getParentFile());
-		System.out.println(new File(url.toURI().toString()).getParentFile().getParentFile());
-		System.out.println(new File(url.toURI().toString()).toURI().getPath());
-		System.out.println(Main.class.getProtectionDomain().getCodeSource().getLocation());
-		final String[] myLocationViaProtectionDomain = {null};
-		AccessController.doPrivileged(new PrivilegedAction(){
-		    public Object run(){
-		        myLocationViaProtectionDomain[0] = getClass().getProtectionDomain().getCodeSource().getLocation().toString();
-		        System.out.println("myLocationViaProtectionDomain: " + myLocationViaProtectionDomain[0]);
-		        return null;
-		    }
-		});
+		System.out.println(new File(Main.class.getClassLoader().getResource("").getFile()));
+		File dir = new File(Main.class.getClassLoader().getResource("").getFile());
+		String jar = System.getProperty("java.class.path");
+		File jarFile = new File(dir.getAbsolutePath(), jar);
+		System.out.println(System.getProperty("java.class.path"));
+		System.out.println(dir);
+		System.out.println(dir.getAbsolutePath());
+		System.out.println(jar);
+		System.out.println(jarFile.getAbsolutePath());
+		Version.getVersion();
 		if(alarmData.exists() == false) {
 			alarmData.mkdirs();
 		}
