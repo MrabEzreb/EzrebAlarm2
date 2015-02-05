@@ -23,6 +23,7 @@ public class AlarmEntry extends JToggleButton {
 
 	public AlarmEntry(final Alarm a, final SelectionListener sl) {
 		setText(a.name);
+		this.a = a;
 		setToolTipText(a.time.toString());
 		setBorder(null);
 		setBorderPainted(false);
@@ -37,4 +38,5 @@ public class AlarmEntry extends JToggleButton {
 			}
 		});
 	}
+	public Alarm a;
 }

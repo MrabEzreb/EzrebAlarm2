@@ -9,6 +9,7 @@ import javax.swing.WindowConstants;
 
 import com.ezreb.alarm.Alarm;
 import com.ezreb.alarm.AlarmEntry;
+import com.ezreb.alarm.ManageAlarms;
 import com.ezreb.alarm.NewAlarm;
 import com.ezreb.alarm.SelectionListener;
 import com.ezreb.filebrowser.images.ImageLoader;
@@ -78,8 +79,26 @@ public class FileBrowser {
 			}
 		});
 	}
+	public void run3(ManageAlarms ma) {
+		MainWindow mw = run2();
+		this.ma = ma;
+		mw.addSelectionListener(new SelectionListener() {
+			
+			@Override
+			public void onSelection(File f) {
+				FileBrowser.this.f = f;
+				FileBrowser.this.ma.getFile(f);
+			}
+			@Override
+			public void onSelection(Alarm a, AlarmEntry a2) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
+	}
 	@SuppressWarnings("unused")
 	private File f;
 	private NewAlarm na;
+	private ManageAlarms ma;
 
 }

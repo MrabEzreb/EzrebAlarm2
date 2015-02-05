@@ -20,11 +20,19 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
 import java.awt.GridLayout;
+
 import javax.swing.JTextField;
+
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
+
 import javax.swing.JSeparator;
 import javax.swing.JCheckBox;
+
+import com.ezreb.filebrowser.FileBrowser;
+
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 @SuppressWarnings("serial")
 public class ManageAlarms extends JDialog implements Runnable {
@@ -160,6 +168,12 @@ public class ManageAlarms extends JDialog implements Runnable {
 		}
 		{
 			JButton btnSelect = new JButton("Select");
+			btnSelect.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					FileBrowser fb = new FileBrowser();
+					fb.run3(ManageAlarms.this);
+				}
+			});
 			GridBagConstraints gbc_btnSelect = new GridBagConstraints();
 			gbc_btnSelect.insets = new Insets(0, 0, 5, 5);
 			gbc_btnSelect.gridx = 0;
@@ -249,5 +263,10 @@ public class ManageAlarms extends JDialog implements Runnable {
 	}
 	public JPanel getViewContainer() {
 		return viewContainer;
+	}
+	public void getFile(File f) {
+		alarmes[this.selected].a.toRun = f;
+		Main.alarmsAll = alarms;
+		AlarmFile.saveAlarms(Main.alarmsAll);
 	}
 }
