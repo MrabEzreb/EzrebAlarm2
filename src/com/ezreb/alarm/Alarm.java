@@ -32,7 +32,7 @@ public class Alarm implements Runnable {
 		JSONObject retVal = new JSONObject();
 		retVal.put("Name", this.name);
 		retVal.put("Time", this.time.toJSON());
-		retVal.put("To Run", this.toRun.getAbsolutePath());
+		retVal.put("toRun", this.toRun.getAbsolutePath());
 		return retVal;
 	}
 	@Override
@@ -42,7 +42,7 @@ public class Alarm implements Runnable {
 			if(this.time.isNow()) {
 				this.action.onAlarm(this);
 				this.isActive = false;
-				if(this.toRun.equals(new File(System.getProperty("os.arch")))) {
+				if(this.toRun.getAbsolutePath().equals(new File(System.getProperty("os.arch")).getAbsolutePath())) {
 					
 				} else {
 					try {

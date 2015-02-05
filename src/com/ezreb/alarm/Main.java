@@ -109,6 +109,7 @@ public class Main {
 	public static Alarm[] alarmsAll;
 	public static NewAlarm newAlarmDia;
 	public static RemoveAlarm oldAlarmDia;
+	public static ManageAlarms manageDia;
 	public static About ab;
 	public static StatsForKnurds stats;
 	private static void tray() {
@@ -138,6 +139,15 @@ public class Main {
 			public void actionPerformed(ActionEvent e) {
 				oldAlarmDia = new RemoveAlarm();
 				new Thread(oldAlarmDia).start();
+			}
+		});
+        MenuItem manage = new MenuItem("Manage Alarms");
+        manage.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				manageDia = new ManageAlarms();
+				new Thread(manageDia).start();
 			}
 		});
         MenuItem exitItem = new MenuItem("Exit");
@@ -188,6 +198,7 @@ public class Main {
         //Add components to pop-up menu
         popup.add(createNew);
         popup.add(removeOld);
+        popup.add(manage);
         popup.addSeparator();
         popup.add(close);
         popup.add(knurds);
@@ -197,7 +208,7 @@ public class Main {
       
         trayIcon.setPopupMenu(popup);
         trayIcon.setImageAutoSize(true);
-        trayIcon.setToolTip("EzrebAlarm");
+        trayIcon.setToolTip("EzrebAlarm Dev");
         trayIcon.addMouseListener(new MouseAdapter() {
         	@Override
         	public void mouseClicked(MouseEvent e) {

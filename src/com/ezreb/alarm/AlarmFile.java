@@ -52,6 +52,7 @@ public class AlarmFile {
 				System.out.println(alarmsArray.getJSONObject(i));
 				alarms3[i] = new Alarm(alarmsArray.getJSONObject(i));
 			}
+			System.out.println("loaded "+alarmsArray.length()+" alarms");
 			return alarms3;
 		} catch (IOException e) {
 			// TODO Auto-generated catch block

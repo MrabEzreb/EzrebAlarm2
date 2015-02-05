@@ -18,6 +18,7 @@ import java.awt.Dimension;
 
 import javax.swing.JLabel;
 
+import com.ezreb.alarm.SelectionListener;
 import com.ezreb.filebrowser.images.ImageLoader;
 
 import java.awt.Color;
@@ -32,6 +33,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.FileFilter;
+
 import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
 
@@ -99,6 +101,7 @@ public class MainWindow extends JDialog {
 						MainWindow.this.dispose();
 						MainWindow.this.done = true;
 						MainWindow.this.setVisible(false);
+						MainWindow.this.runSelectionListeners();
 					}
 				});
 				buttonPane.add(okButton);
@@ -242,6 +245,7 @@ public class MainWindow extends JDialog {
 	public int yadd = 20;
 	public boolean done = false;
 	public File finalFile;
+	private SelectionListener[] listeners = new SelectionListener[0];
 	public void updateListing() {
 		try {
 			this.FileNameField.setText(this.finalFile.getName());
@@ -310,6 +314,21 @@ public class MainWindow extends JDialog {
 			}
 		}
 		return finalFile;
+	}
+	public void addSelectionListener(SelectionListener sl) {
+		SelectionListener[] old = this.listeners;
+		SelectionListener[] newONe = new SelectionListener[old.length+1];
+		for (int i = 0; i < old.length; i++) {
+			newONe[i] = old[i];
+		}
+		newONe[old.length] = sl;
+		this.listeners = newONe;
+	}
+	private void runSelectionListeners() {
+		SelectionListener[] ls = this.listeners;
+		for (SelectionListener selectionListener : ls) {
+			selectionListener.onSelection(this.finalFile);
+		}
 	}
 	public void setSelected(FileEntry fe) {
 		Component[] cs = this.view.getComponents();

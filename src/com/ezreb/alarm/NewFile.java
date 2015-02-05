@@ -15,7 +15,9 @@ import javax.swing.JTextArea;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 
 @SuppressWarnings("serial")
@@ -95,6 +97,10 @@ public class NewFile extends JDialog implements Runnable {
 							Main.alarmJSON.createNewFile();
 							NewFile.this.setVisible(false);
 							NewFile.this.setEnabled(false);
+							BufferedWriter bw = new BufferedWriter(new FileWriter(Main.alarmJSON));
+							bw.write("{\"Sunday\":[],\"Monday\":[],\"Tuesday\":[],\"Wednesday\":[],\"Thursday\":[],\"Friday\":[],\"Saturday\":[]}");
+							bw.flush();
+							bw.close();
 						} catch (IOException e1) {
 							// TODO Auto-generated catch block
 							e1.printStackTrace();
