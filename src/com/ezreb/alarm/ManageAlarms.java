@@ -269,4 +269,18 @@ public class ManageAlarms extends JDialog implements Runnable {
 		Main.alarmsAll = alarms;
 		AlarmFile.saveAlarms(Main.alarmsAll);
 	}
+	public void moveAlarm(int number, boolean up) {
+		Alarm[] oldAls = this.alarms;
+		Alarm[] newAls = oldAls;
+		if(up) {
+			newAls[number] = oldAls[number+1];
+			newAls[number+1] = oldAls[number];
+		} else {
+			newAls[number] = oldAls[number-1];
+			newAls[number-1] = oldAls[number];
+		}
+		this.alarms = newAls;
+		Main.alarmsAll = this.alarms;
+		AlarmFile.saveAlarms(Main.alarmsAll);
+	}
 }
