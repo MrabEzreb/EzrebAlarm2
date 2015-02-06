@@ -9,7 +9,10 @@ import javax.imageio.ImageIO;
 public class ImageLoader {
 
 	public static void loadImages() {
-		ARROW_UP = loadImage("arrow.gif");
+		ARROW_UP = loadImage("arrowUp.gif");
+		ARROW_DOWN = loadImage("arrowDown.gif");
+		ARROW_LEFT = loadImage("arrowLeft.gif");
+		ARROW_RIGHT = loadImage("arrowRight.gif");
 		SCRIPT = loadImage("script.png");
 		FILE = loadImage("file.jpg");
 		FOLDER = loadImage("folder.png");
@@ -35,6 +38,9 @@ public class ImageLoader {
 		return null;
 	}
 	public static Image ARROW_UP;
+	public static Image ARROW_DOWN;
+	public static Image ARROW_LEFT;
+	public static Image ARROW_RIGHT;
 	public static Image SCRIPT;
 	public static Image FILE;
 	public static Image FOLDER;

@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.FlowLayout;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
@@ -19,6 +20,7 @@ import java.awt.Dimension;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
+import java.util.Calendar;
 import java.awt.GridLayout;
 
 import javax.swing.JTextField;
@@ -30,9 +32,13 @@ import javax.swing.JSeparator;
 import javax.swing.JCheckBox;
 
 import com.ezreb.filebrowser.FileBrowser;
+import com.ezreb.filebrowser.images.ImageLoader;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+
+import javax.swing.SwingConstants;
+import javax.swing.Icon;
 
 @SuppressWarnings("serial")
 public class ManageAlarms extends JDialog implements Runnable {
@@ -40,6 +46,7 @@ public class ManageAlarms extends JDialog implements Runnable {
 	private final JPanel contentPanel = new JPanel();
 	private JScrollPane scrollPane;
 	private JPanel viewContainer;
+	private int dayCalendar;
 
 	/**
 	 * Launch the application.
@@ -58,10 +65,15 @@ public class ManageAlarms extends JDialog implements Runnable {
 		setVisible(true);
 		fullRefresh();
 	}
+	public ManageAlarms(int dayCalendar) {
+		this();
+		this.dayCalendar = dayCalendar;
+	}
 	/**
 	 * Create the dialog.
 	 */
 	public ManageAlarms() {
+		this.dayCalendar = Calendar.getInstance().get(Calendar.DAY_OF_WEEK);
 		setTitle("test");
 		setPreferredSize(new Dimension(450, 300));
 		setUndecorated(true);
@@ -190,18 +202,85 @@ public class ManageAlarms extends JDialog implements Runnable {
 		}
 		{
 			JPanel buttonPane = new JPanel();
-			buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
 			getContentPane().add(buttonPane, BorderLayout.SOUTH);
+			GridBagLayout gbl_buttonPane = new GridBagLayout();
+			gbl_buttonPane.columnWidths = new int[] {23, 53, 23, 175, 45, 45, 30};
+			gbl_buttonPane.rowHeights = new int[] {23, 0};
+			gbl_buttonPane.columnWeights = new double[]{0.0, 0.0, 0.0, 1.0, 0.0, 0.0};
+			gbl_buttonPane.rowWeights = new double[]{0.0, Double.MIN_VALUE};
+			buttonPane.setLayout(gbl_buttonPane);
 			{
-				JButton okButton = new JButton("OK");
+				JButton btnUp = new JButton(new ImageIcon(ImageLoader.ARROW_UP));
+				btnUp.setPreferredSize(new Dimension(23, 23));
+				btnUp.setMargin(new Insets(2, 4, 2, 4));
+				btnUp.addActionListener(new ActionListener() {
+					
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						ManageAlarms.this.moveAlarm(ManageAlarms.this.selected, true);
+						System.out.println("moved alarms");
+					}
+				});
+				GridBagConstraints gbc_btnUp = new GridBagConstraints();
+				gbc_btnUp.fill = GridBagConstraints.BOTH;
+				gbc_btnUp.gridx = 0;
+				gbc_btnUp.gridy = 0;
+				buttonPane.add(btnUp, gbc_btnUp);
+			}
+			{
+				JLabel lblArrange = new JLabel("Arrange");
+				lblArrange.setHorizontalAlignment(SwingConstants.CENTER);
+				lblArrange.setPreferredSize(new Dimension(53, 23));
+				GridBagConstraints gbc_lblArrange = new GridBagConstraints();
+				gbc_lblArrange.gridx = 1;
+				gbc_lblArrange.gridy = 0;
+				buttonPane.add(lblArrange, gbc_lblArrange);
+			}
+			{
+				JButton button = new JButton(new ImageIcon(ImageLoader.ARROW_DOWN));
+				button.addActionListener(new ActionListener() {
+					
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						ManageAlarms.this.moveAlarm(ManageAlarms.this.selected, false);
+						System.out.println("moved alarms");
+					}
+				});
+				button.setPreferredSize(new Dimension(23, 23));
+				button.setMargin(new Insets(2, 4, 2, 4));
+				GridBagConstraints gbc_button = new GridBagConstraints();
+				gbc_button.fill = GridBagConstraints.BOTH;
+				gbc_button.gridx = 2;
+				gbc_button.gridy = 0;
+				buttonPane.add(button, gbc_button);
+			}
+			{
+				JButton okButton = new JButton("Load Different Day");
 				okButton.setActionCommand("OK");
-				buttonPane.add(okButton);
+				GridBagConstraints gbc_okButton = new GridBagConstraints();
+				gbc_okButton.fill = GridBagConstraints.BOTH;
+				gbc_okButton.insets = new Insets(0, 0, 0, 5);
+				gbc_okButton.gridx = 5;
+				gbc_okButton.gridy = 0;
+				buttonPane.add(okButton, gbc_okButton);
 				getRootPane().setDefaultButton(okButton);
 			}
 			{
-				JButton cancelButton = new JButton("Cancel");
+				JButton cancelButton = new JButton("Close");
+				cancelButton.addActionListener(new ActionListener() {
+					
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						ManageAlarms.this.setVisible(false);
+						ManageAlarms.this.setEnabled(false);
+					}
+				});
 				cancelButton.setActionCommand("Cancel");
-				buttonPane.add(cancelButton);
+				GridBagConstraints gbc_cancelButton = new GridBagConstraints();
+				gbc_cancelButton.fill = GridBagConstraints.BOTH;
+				gbc_cancelButton.gridx = 6;
+				gbc_cancelButton.gridy = 0;
+				buttonPane.add(cancelButton, gbc_cancelButton);
 			}
 		}
 		{
@@ -213,6 +292,7 @@ public class ManageAlarms extends JDialog implements Runnable {
 			viewContainer = new JPanel();
 			viewContainer.setBackground(Color.WHITE);
 			viewContainer.setPreferredSize(new Dimension(80, 200));
+			viewContainer.setIgnoreRepaint(true);
 			scrollPane.setViewportView(viewContainer);
 		}
 		
@@ -243,8 +323,14 @@ public class ManageAlarms extends JDialog implements Runnable {
 		alarmes[this.selected].setSelected(true);
 	}
 	private void fullRefresh() {
-		this.alarms = Main.alarmsAll;
+		if(alarms != null) {
+			for (int i = 0; i < alarms.length; i++) {
+				alarms[i].isActive = false;
+			}
+		}
+		this.alarms = AlarmFile.getAlarms(dayCalendar);
 		viewContainer.removeAll();
+		viewContainer.paint(scrollPane.getViewport().getGraphics());
 		this.alarmes = new AlarmEntry[alarms.length];
 		for (int i = 0; i < alarms.length; i++) {
 			alarmes[i] = new AlarmEntry(alarms[i], new SelectionListener() {
@@ -260,27 +346,36 @@ public class ManageAlarms extends JDialog implements Runnable {
 			alarmes[i].setBackground(new Color(0, 0, 0, 0));
 			viewContainer.add(alarmes[i]);
 		}
+		viewContainer.paintAll(viewContainer.getGraphics());
 	}
 	public JPanel getViewContainer() {
 		return viewContainer;
 	}
 	public void getFile(File f) {
 		alarmes[this.selected].a.toRun = f;
-		Main.alarmsAll = alarms;
-		AlarmFile.saveAlarms(Main.alarmsAll);
+		AlarmFile.saveAlarms(this.alarms, dayCalendar);
 	}
 	public void moveAlarm(int number, boolean up) {
-		Alarm[] oldAls = this.alarms;
-		Alarm[] newAls = oldAls;
-		if(up) {
-			newAls[number] = oldAls[number+1];
-			newAls[number+1] = oldAls[number];
-		} else {
-			newAls[number] = oldAls[number-1];
-			newAls[number-1] = oldAls[number];
+		Alarm[] oldAls = AlarmFile.getAlarms(dayCalendar);
+		Alarm[] newAls = new Alarm[oldAls.length];
+		for (int i = 0; i < newAls.length; i++) {
+			newAls[i] = new Alarm(oldAls[i].toJSON());
 		}
-		this.alarms = newAls;
-		Main.alarmsAll = this.alarms;
-		AlarmFile.saveAlarms(Main.alarmsAll);
+		if(up) {
+			newAls[number] = new Alarm(oldAls[number-1].toJSON());
+			newAls[number-1] = new Alarm(oldAls[number].toJSON());
+		} else {
+			newAls[number] = new Alarm(oldAls[number+1].toJSON());
+			newAls[number+1] = new Alarm(oldAls[number].toJSON());
+		}
+		for (int i = 0; i < oldAls.length; i++) {
+			oldAls[i].isActive = false;
+		}
+		AlarmFile.saveAlarms(newAls, dayCalendar);
+		for (int i = 0; i < newAls.length; i++) {
+			newAls[i].isActive = false;
+		}
+		this.selected = -1;
+		System.out.println("done");
 	}
 }

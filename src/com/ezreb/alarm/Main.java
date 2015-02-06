@@ -23,6 +23,8 @@ import javax.swing.ImageIcon;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import com.ezreb.filebrowser.images.ImageLoader;
+
 public class Main {
 
 	public static void main(String[] args) {
@@ -40,6 +42,7 @@ public class Main {
 //		System.out.println(jarFile.getAbsolutePath());
 //		Version.getVersion();
 		System.out.println(new File(System.getProperty("os.arch")).getAbsolutePath());
+		ImageLoader.loadImages();
 		Thread t = new Thread(new Runnable() {
 			
 			@Override

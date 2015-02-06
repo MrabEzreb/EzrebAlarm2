@@ -39,4 +39,14 @@ public class AlarmEntry extends JToggleButton {
 		});
 	}
 	public Alarm a;
+	@Override
+	public boolean equals(Object obj) {
+		boolean retVal = false;
+		if(obj instanceof AlarmEntry) {
+			if(((AlarmEntry) obj).a.equals(this.a)) {
+				return true;
+			}
+		}
+		return retVal;
+	}
 }
